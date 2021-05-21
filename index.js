@@ -9,38 +9,39 @@ const CURRENT_USER = os.userInfo().username;
 const PORT = 8080;
 let ActiveDir = `/media/${CURRENT_USER}`;
 const HOME = os.homedir();
-
+const driveRoute = require("./routes/index");
 const { isDir, convertBytes, getDirTotalSize } = require("./util/UtilFunction");
 
-app.get("", (req, res) => {
-  fs.readdir(ActiveDir, function (err, files) {
-    //handling error
-    if (err) {
-      return res.status(400).json("Unable to scan directory: " + err);
-    }
-    //listing all files using forEach
-    const yn = [];
-    files.forEach(function (file) {
-      try {
-        const obj = {};
+app.use(driveRoute);
+// app.get("", (req, res) => {
+//   fs.readdir(ActiveDir, function (err, files) {
+//     //handling error
+//     if (err) {
+//       return res.status(400).json("Unable to scan directory: " + err);
+//     }
+//     //listing all files using forEach
+//     const yn = [];
+//     files.forEach(function (file) {
+//       try {
+//         const obj = {};
 
-        obj.name = file;
+//         obj.name = file;
 
-        obj.type = isDir(path.join(ActiveDir, file))
-          ? "Dir"
-          : file.split(".")[file.split(".").length - 1];
-        if (obj.type != "Dir") {
-          obj.size = convertBytes(fs.statSync(path.join(ActiveDir, file)).size);
-        }
-        yn.push(obj);
-      } catch (error) {
-        console.log(error);
-        return;
-      }
-    });
-    return res.status(200).json(yn);
-  });
-});
+//         obj.type = isDir(path.join(ActiveDir, file))
+//           ? "Dir"
+//           : file.split(".")[file.split(".").length - 1];
+//         if (obj.type != "Dir") {
+//           obj.size = convertBytes(fs.statSync(path.join(ActiveDir, file)).size);
+//         }
+//         yn.push(obj);
+//       } catch (error) {
+//         console.log(error);
+//         return;
+//       }
+//     });
+//     return res.status(200).json(yn);
+//   });
+// });
 app.get("/home", (req, res) => {
   fs.readdir(HOME, function (err, files) {
     //handling error

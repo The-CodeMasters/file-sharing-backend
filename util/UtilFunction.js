@@ -1,8 +1,15 @@
+const path = require("path");
+const fs = require("fs");
+let os = require("os");
+
 function isDir(path) {
+  console.log({ path });
   try {
     var stat = fs.lstatSync(path);
+    console.log({ stat });
     return stat.isDirectory();
   } catch (e) {
+    console.log(e);
     // lstatSync throws an error if path doesn't exist
     return false;
   }
